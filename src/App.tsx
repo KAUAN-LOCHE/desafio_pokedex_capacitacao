@@ -1,45 +1,47 @@
 import "./App.css";
-import { useApp } from "./App.hook";
+// import { useApp } from "./App.hook";
+import Pokedex from "./pages/Pokedex/pokedex";
 
 function App() {
-  const { loading, pokemons, onPokemonSelect } = useApp();
+  // const { loading, pokemons, onPokemonSelect } = useApp();
+;
 
-  const renderLoading = () => (
-    <div className="loading">
-      <p>Carregando...</p>
-    </div>
-  );
+  // const renderPokedex = () => (
+  //   <>
+  //     {/* <h1>Pokédex</h1>
+  //     <h2>Selecione um Pokémon</h2>
+  //     <section>
+  //       <ul className="pokemon-grid">
+  //         {pokemons.map((pokemon) => (
+  //           <li key={pokemon.id}>
+  //             <div
+  //               onClick={() => onPokemonSelect(pokemon)}
+  //               className="pokemon-wrapper"
+  //             >
+  //               <h3>{pokemon.name}</h3>
+  //               <p className={`type-${pokemon.type1.toLowerCase()}`}>
+  //                 {pokemon.type1}
+  //               </p>
+  //               {pokemon.type2 && (
+  //                 <p className={`type-${pokemon.type2.toLowerCase()}`}>
+  //                   {pokemon.type2}
+  //                 </p>
+  //               )}
+  //             </div>
+  //           </li>
+  //         ))}
+  //       </ul>
+  //     </section> */}
+  //     <Pokedex></Pokedex>
+  //   </>
+  // );
 
-  const renderPokedex = () => (
+  // return <main>{loading ? renderLoading() : renderPokedex()}</main>;
+  return(
     <>
-      <h1>Pokédex</h1>
-      <h2>Selecione um Pokémon</h2>
-      <section>
-        <ul className="pokemon-grid">
-          {pokemons.map((pokemon) => (
-            <li key={pokemon.id}>
-              <div
-                onClick={() => onPokemonSelect(pokemon)}
-                className="pokemon-wrapper"
-              >
-                <h3>{pokemon.name}</h3>
-                <p className={`type-${pokemon.type1.toLowerCase()}`}>
-                  {pokemon.type1}
-                </p>
-                {pokemon.type2 && (
-                  <p className={`type-${pokemon.type2.toLowerCase()}`}>
-                    {pokemon.type2}
-                  </p>
-                )}
-              </div>
-            </li>
-          ))}
-        </ul>
-      </section>
+    <Pokedex></Pokedex>
     </>
   );
-
-  return <main>{loading ? renderLoading() : renderPokedex()}</main>;
 }
 
 export default App;

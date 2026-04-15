@@ -1,0 +1,144 @@
+
+.container {
+  min-height: 100vh;
+  background-color: #121212;
+  color: #ffffff;
+  padding: 2rem 4rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.header {
+  border-bottom: 2px solid #1e1e1e;
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 2.5rem;
+  color: #ffffff;
+  margin: 0;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+  margin-bottom: 3rem;
+}
+
+.card {
+  background-color: #1e1e1e;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  border-color: #e3350d;
+  box-shadow: 0 12px 20px rgba(227, 53, 13, 0.2);
+}
+
+.image {
+  width: 120px;
+  height: 120px;
+  image-rendering: pixelated;
+  margin-bottom: 0.5rem;
+}
+
+.idNumber {
+  color: #a0a0a0;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.name {
+  margin-top: 0.5rem;
+  text-transform: capitalize;
+  font-size: 1.2rem;
+  color: #ffffff;
+}
+
+.loading {
+  color: #a0a0a0;
+  font-size: 1.2rem;
+  margin: 2rem 0;
+}
+
+.loadMoreBtn {
+  background-color: #e3350d;
+  color: white;
+  border: none;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 2rem;
+}
+
+.loadMoreBtn:hover {
+  background-color: #c92b0a;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 3rem;
+  padding-bottom: 2rem;
+  flex-wrap: wrap; 
+}
+
+.pageBtn {
+  background-color: #1e1e1e; /* Ajuste para a cor de surface do seu tema */
+  color: #a0a0a0;
+  border: 1px solid #333;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pageBtn:hover:not(:disabled):not(.activePage) {
+  background-color: #2c2c2c;
+  color: #ffffff;
+  border-color: #555;
+  transform: translateY(-2px);
+}
+
+.pageBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.activePage {
+  background-color: #e3350d; /* Vermelho Pokémon de destaque */
+  color: #ffffff;
+  border-color: #e3350d;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(227, 53, 13, 0.3);
+}
+
+.ellipsis {
+  color: #a0a0a0;
+  font-weight: bold;
+  padding: 0 0.5rem;
+  letter-spacing: 2px;
+}
