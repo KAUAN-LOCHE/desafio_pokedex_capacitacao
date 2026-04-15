@@ -64,7 +64,7 @@ export default function Pokedex() {
     <PageShell mainClassName="shellMain">
       <div className="container">
         <header className="header">
-          <h1 className="title">Pokédex - EJCOMP</h1>
+          <h1 className="title">Pokédex</h1>
         </header>
 
         <main className="main">
