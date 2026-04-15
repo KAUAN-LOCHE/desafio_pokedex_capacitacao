@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./styles.css";
 import { Sidebar } from "../components/Sidebar";
 import { Footer } from "../components/Footer";
-
 
 const Home: React.FC = () => {
   const noticias = [
@@ -31,7 +30,7 @@ const Home: React.FC = () => {
       <div className="home-layout">
         <Sidebar isOpen={isSidebarOpen} onToggle={toggleSidebar} />
 
-        <div className="home-page">
+        <div className={`home-page ${!isSidebarOpen ? "home-page--expanded" : ""}`}>
           <div className="home-container">
             <header className="home-header">
               <div className="header-inner">
@@ -75,9 +74,9 @@ const Home: React.FC = () => {
                 <p className="news-text-isolated">{noticias[noticiaAtual]}</p>
               </section>
             </main>
-
-            <Footer />
           </div>
+
+          <Footer />
         </div>
       </div>
   );
