@@ -17,7 +17,7 @@ export function PageShell({ children, mainClassName = "" }: PageShellProps) {
 
   return (
     <div className="page-shell">
-      <Sidebar isOpen={isSidebarOpen} onToggle={toggleSidebar} />
+      <Sidebar isOpen={isSidebarOpen} />
 
       <div
         className={`page-shell__surface ${

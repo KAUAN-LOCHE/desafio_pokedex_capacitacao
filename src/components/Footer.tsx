@@ -20,7 +20,7 @@ export function Footer() {
             <div className="footer__contacts">
                 <div className="footer__contact-item">
                     <span className="footer__contact-label">Suporte Técnico</span>
-                    <a href="mailto:dev@ejcomp.com.br" className="footer__contact-value">dev@ejcomp.com.br</a>
+                    <a href="mailto:dev@ejcomp.com.br" className="footer__contact-value">emailcapacitacao@ejcomp.com.br</a>
                 </div>
                 <div className="footer__contact-item">
                     <span className="footer__contact-label">Base de Dados</span>
@@ -29,7 +29,7 @@ export function Footer() {
             </div>
 
             <div className="footer__version-tag">
-                Capacitação 2026
+                Capacitação 2026 usando PokéAPI
             </div>
         </footer>
     );

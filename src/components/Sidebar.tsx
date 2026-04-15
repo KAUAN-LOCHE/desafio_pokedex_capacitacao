@@ -2,27 +2,19 @@ import { Link, useLocation } from "react-router-dom";
 import "./Sidebar.css";
 
 interface SidebarProps {
-    isOpen: boolean;
-    onToggle: () => void;
+  isOpen: boolean;
 }
 
-export function Sidebar({ isOpen, onToggle }: SidebarProps) {
-    const location = useLocation();
+export function Sidebar({ isOpen }: SidebarProps) {
+  const location = useLocation();
 
-    return (
-        <div className="home-sidebar-container">
-            <aside className={`home-sidebar ${!isOpen ? "home-sidebar--closed" : ""}`}>
-                <button
-                    className="sidebar__toggle-btn"
-                    onClick={onToggle}
-                    aria-label="Alternar menu"
-                >
-                    <svg viewBox="0 0 24 24">
-                        <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
-                    </svg>
-                </button>
-
-                <div className="sidebar__brand">
+  return (
+    <div className="home-sidebar-container">
+      <aside className={`home-sidebar ${!isOpen ? "home-sidebar--closed" : ""}`}>
+        <div className="sidebar__brand">
+          <div className="sidebar__brand-compact" aria-hidden="true">
+            P
+                    </div>
                     <h1 className="sidebar__title">
                         Poké<span>dex</span>
                     </h1>
