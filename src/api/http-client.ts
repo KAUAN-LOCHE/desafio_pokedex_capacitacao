@@ -23,10 +23,81 @@ class HttpClient {
   }
 }
 
-const httpClient = new HttpClient("https://jsonplaceholder.typicode.com/", {
+export const pokeApiClient = new HttpClient("https://pokeapi.co/api/v2", {
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-export default httpClient;
+export interface PokemonDetails {
+  id: number;
+  name: string;
+  height: number;
+  weight: number;
+  sprites: {
+    front_default: string | null;
+    other: {
+      "official-artwork": {
+        front_default: string | null;
+      };
+    };
+  };
+  types: Array<{
+    type: {
+      name: string;
+    };
+  }>;
+  stats: Array<{
+    base_stat: number;
+    stat: {
+      name: string;
+    };
+  }>;
+}
+
+export interface PokemonBase {
+  name: string;
+  url: string;
+  id: string;
+  image: string;
+}
+
+interface PokeApiResponse {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: { name: string; url: string }[];
+}
+
+export interface PaginatedResponse {
+  nextOffset: number | null;
+  results: PokemonBase[];
+}
+
+export const fetchPokemonPage = async (
+    limit: number = 40,
+    offset: number = 0
+): Promise<PaginatedResponse> => {
+  const data = await pokeApiClient.get<PokeApiResponse>("/pokemon", {
+    params: { limit, offset },
+  });
+
+  const results = data.results.map((poke) => {
+    const urlParts = poke.url.split("/");
+    const id = urlParts[urlParts.length - 2];
+
+    return {
+      name: poke.name,
+      url: poke.url,
+      id,
+      image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`,
+    };
+  });
+
+  return {
+    nextOffset: data.next ? offset + limit : null,
+    results,
+  };
+};
+
+export default pokeApiClient;
