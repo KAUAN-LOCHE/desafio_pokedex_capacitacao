@@ -9,7 +9,7 @@ interface PageShellProps {
 }
 
 export function PageShell({ children, mainClassName = "" }: PageShellProps) {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);

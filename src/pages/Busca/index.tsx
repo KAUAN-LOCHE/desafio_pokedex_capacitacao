@@ -1,6 +1,6 @@
 import { useState } from "react";
-import pokeApiClient, { type PokemonDetails } from "../api/http-client";
-import { PageShell } from "../components/PageShell";
+import pokeApiClient, { type PokemonDetails } from "../../api/http-client";
+import { PageShell } from "../../components/PageShell";
 import {
   Radar,
   RadarChart,
@@ -8,7 +8,7 @@ import {
   PolarAngleAxis,
   ResponsiveContainer
 } from "recharts";
-import "./Busca.css";
+import "./styles.css";
 
 export default function Busca() {
   const [searchTerm, setSearchTerm] = useState("");

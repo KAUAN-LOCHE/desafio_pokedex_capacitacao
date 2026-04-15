@@ -2,9 +2,9 @@ import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { PageShell } from "../../components/PageShell";
-import type { AppDispatch, RootState } from "../../store/";
+import type { AppDispatch, RootState } from "../../store";
 import { loadPokemons } from "../../store/pokedex-slice";
-import styles from "./pokedex.module.css";
+import "./styles.css"; 
 
 export default function Pokedex() {
   const dispatch = useDispatch<AppDispatch>();
@@ -60,38 +60,39 @@ export default function Pokedex() {
   };
 
   return (
-    <PageShell mainClassName={styles.shellMain}>
-      <div className={styles.container}>
-        <header className={styles.header}>
-          <h1 className={styles.title}>Pokédex - EJCOMP</h1>
+    // 2. Substituição dos styles.class por "class"
+    <PageShell mainClassName="shellMain">
+      <div className="container">
+        <header className="header">
+          <h1 className="title">Pokédex - EJCOMP</h1>
         </header>
 
-        <main className={styles.main}>
-          {error && <p className={styles.error}>{error}</p>}
+        <main className="main">
+          {error && <p className="error">{error}</p>}
 
-          <div className={styles.grid}>
+          <div className="grid">
             {pokemons.map((poke) => (
-              <article key={poke.id} className={styles.card}>
+              <article key={poke.id} className="card">
                 <img
                   src={poke.image}
                   alt={poke.name}
-                  className={styles.image}
+                  className="image"
                   loading="lazy"
                 />
-                <span className={styles.idNumber}>Nº {poke.id.padStart(3, "0")}</span>
-                <h2 className={styles.name}>{poke.name.replace("-", " ")}</h2>
+                <span className="idNumber">Nº {poke.id.padStart(3, "0")}</span>
+                <h2 className="name">{poke.name.replace("-", " ")}</h2>
               </article>
             ))}
           </div>
 
-          {loading && <p className={styles.loading}>Carregando dados da PokeAPI...</p>}
+          {loading && <p className="loading">Carregando dados da PokeAPI...</p>}
 
           {!loading && (
-            <div className={styles.pagination}>
+            <div className="pagination">
               <button
                 onClick={handlePrevPage}
                 disabled={currentPage === 1}
-                className={`${styles.pageBtn} ${styles.navBtn}`}
+                className="pageBtn navBtn"
               >
                 &laquo;
               </button>
@@ -99,7 +100,7 @@ export default function Pokedex() {
               {getPaginationGroup().map((item, index) => {
                 if (item === "...") {
                   return (
-                    <span key={`dots-${index}`} className={styles.dots}>
+                    <span key={`dots-${index}`} className="dots">
                       &#8230;
                     </span>
                   );
@@ -110,9 +111,7 @@ export default function Pokedex() {
                   <button
                     key={pageNumber}
                     onClick={() => goToPage(pageNumber)}
-                    className={`${styles.pageBtn} ${
-                      currentPage === pageNumber ? styles.activePage : ""
-                    }`}
+                    className={`pageBtn ${currentPage === pageNumber ? "activePage" : ""}`}
                   >
                     {pageNumber}
                   </button>
@@ -122,7 +121,7 @@ export default function Pokedex() {
               <button
                 onClick={handleNextPage}
                 disabled={currentPage === totalPages}
-                className={`${styles.pageBtn} ${styles.navBtn}`}
+                className="pageBtn navBtn"
               >
                 &raquo;
               </button>

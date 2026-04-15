@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./styles.css";
-import { PageShell } from "../components/PageShell";
+import { PageShell } from "../../components/PageShell";
 
 const Home: React.FC = () => {
   const noticias = [
