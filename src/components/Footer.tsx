@@ -20,16 +20,16 @@ export function Footer() {
             <div className="footer__contacts">
                 <div className="footer__contact-item">
                     <span className="footer__contact-label">Suporte Técnico</span>
-                    <a href="mailto:dev@ejcomp.com.br" className="footer__contact-value">email ejcomp</a>
+                    <a href="mailto:dev@ejcomp.com.br" className="footer__contact-value">dev@ejcomp.com.br</a>
                 </div>
                 <div className="footer__contact-item">
                     <span className="footer__contact-label">Base de Dados</span>
-                    <a href="#" className="footer__contact-value">API v2.0</a>
+                    <span className="footer__contact-value">PokeAPI v2</span>
                 </div>
             </div>
 
             <div className="footer__version-tag">
-                testes murilo footer e sidebar
+                Capacitação 2026
             </div>
         </footer>
     );

@@ -1,10 +1,15 @@
 
 .container {
-  min-height: 100vh;
-  background-color: #121212;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
   color: #ffffff;
-  padding: 2rem 4rem;
+  padding: 2rem 2.5rem 3rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.shellMain {
+  background-color: #121212;
 }
 
 .header {
@@ -136,9 +141,15 @@
   box-shadow: 0 4px 8px rgba(227, 53, 13, 0.3);
 }
 
-.ellipsis {
+.dots {
   color: #a0a0a0;
   font-weight: bold;
   padding: 0 0.5rem;
   letter-spacing: 2px;
+}
+
+@media (max-width: 900px) {
+  .container {
+    padding: 1.5rem 1rem 2rem;
+  }
 }

@@ -1,9 +1,10 @@
-import { useEffect } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import type { AppDispatch, RootState } from '../../store/';
-import { loadPokemons } from '../../store/pokedex-slice';
-import styles from './pokedex.module.css';
+import { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { PageShell } from "../../components/PageShell";
+import type { AppDispatch, RootState } from "../../store/";
+import { loadPokemons } from "../../store/pokedex-slice";
+import styles from "./pokedex.module.css";
 
 export default function Pokedex() {
   const dispatch = useDispatch<AppDispatch>();
@@ -59,6 +60,7 @@ export default function Pokedex() {
   };
 
   return (
+    <PageShell mainClassName={styles.shellMain}>
       <div className={styles.container}>
         <header className={styles.header}>
           <h1 className={styles.title}>Pokédex - EJCOMP</h1>
@@ -69,58 +71,65 @@ export default function Pokedex() {
 
           <div className={styles.grid}>
             {pokemons.map((poke) => (
-                <Link to={`/pokemon/${poke.id}`} key={poke.id} className={styles.card}>
-                  <img
-                      src={poke.image}
-                      alt={poke.name}
-                      className={styles.image}
-                      loading="lazy"
-                  />
-                  <span className={styles.idNumber}>Nº {poke.id.padStart(3, '0')}</span>
-                  <h2 className={styles.name}>{poke.name.replace('-', ' ')}</h2>
-                </Link>
+              <article key={poke.id} className={styles.card}>
+                <img
+                  src={poke.image}
+                  alt={poke.name}
+                  className={styles.image}
+                  loading="lazy"
+                />
+                <span className={styles.idNumber}>Nº {poke.id.padStart(3, "0")}</span>
+                <h2 className={styles.name}>{poke.name.replace("-", " ")}</h2>
+              </article>
             ))}
           </div>
 
           {loading && <p className={styles.loading}>Carregando dados da PokeAPI...</p>}
 
           {!loading && (
-              <div className={styles.pagination}>
-                <button
-                    onClick={handlePrevPage}
-                    disabled={currentPage === 1}
-                    className={`${styles.pageBtn} ${styles.navBtn}`}
-                >
-                  &laquo;
-                </button>
+            <div className={styles.pagination}>
+              <button
+                onClick={handlePrevPage}
+                disabled={currentPage === 1}
+                className={`${styles.pageBtn} ${styles.navBtn}`}
+              >
+                &laquo;
+              </button>
 
-                {getPaginationGroup().map((item, index) => {
-                  if (item === '...') {
-                    return <span key={`dots-${index}`} className={styles.dots}>&#8230;</span>;
-                  }
-
-                  const pageNumber = item as number;
+              {getPaginationGroup().map((item, index) => {
+                if (item === "...") {
                   return (
-                      <button
-                          key={pageNumber}
-                          onClick={() => goToPage(pageNumber)}
-                          className={`${styles.pageBtn} ${currentPage === pageNumber ? styles.activePage : ''}`}
-                      >
-                        {pageNumber}
-                      </button>
+                    <span key={`dots-${index}`} className={styles.dots}>
+                      &#8230;
+                    </span>
                   );
-                })}
+                }
 
-                <button
-                    onClick={handleNextPage}
-                    disabled={currentPage === totalPages}
-                    className={`${styles.pageBtn} ${styles.navBtn}`}
-                >
-                  &raquo;
-                </button>
-              </div>
+                const pageNumber = item as number;
+                return (
+                  <button
+                    key={pageNumber}
+                    onClick={() => goToPage(pageNumber)}
+                    className={`${styles.pageBtn} ${
+                      currentPage === pageNumber ? styles.activePage : ""
+                    }`}
+                  >
+                    {pageNumber}
+                  </button>
+                );
+              })}
+
+              <button
+                onClick={handleNextPage}
+                disabled={currentPage === totalPages}
+                className={`${styles.pageBtn} ${styles.navBtn}`}
+              >
+                &raquo;
+              </button>
+            </div>
           )}
         </main>
       </div>
+    </PageShell>
   );
 }
