@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokédex Moderna - Web App</title>
+    <style>
+        /* ==========================================================================
+           VARIÁVEIS DE TEMA E RESET
+           ========================================================================== */
+        :root {
+            /* Paleta de Cores - Tema Dark */
+            --bg-color: #121212;
+            --surface-color: #1e1e1e;
+            --surface-color-hover: #2c2c2c;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --accent-red: #e3350d; /* Vermelho clássico Pokémon */
+            --accent-blue: #31649e;
+            --border-radius: 12px;
+            --shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            display: flex;
+            height: 100vh;
+            overflow: hidden; /* O scroll será interno nas páginas */
+        }
+
+        /* ==========================================================================
+           LAYOUT: SIDEBAR E MAIN AREA
+           ========================================================================== */
+        #sidebar {
+            width: 250px;
+            background-color: var(--surface-color);
+            height: 100vh;
+            padding: 2rem 1rem;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.3);
+            transition: var(--transition);
+            z-index: 10;
+        }
+
+        #sidebar.collapsed {
+            transform: translateX(-100%);
+            width: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        #sidebar h2 {
+            text-align: center;
+            color: var(--accent-red);
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        #sidebar nav {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        #sidebar nav button {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            text-align: left;
+            padding: 1rem;
+            font-size: 1.1rem;
+            cursor: pointer;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        #sidebar nav button:hover, #sidebar nav button.active {
+            background-color: var(--surface-color-hover);
+            color: var(--text-primary);
+            padding-left: 1.5rem;
+            border-left: 4px solid var(--accent-red);
+        }
+
+        #main-content {
+            flex: 1;
+            height: 100vh;
+            overflow-y: auto; /* Permite scroll apenas na área principal */
+            position: relative;
+        }
+
+        /* Oculta as páginas que não estão ativas (SPA) */
+        .page {
+            display: none;
+            padding: 2rem 4rem;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ==========================================================================
+           PÁGINA: HOME
+           ========================================================================== */
+        #home header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--surface-color);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .toggle-btn {
+            background-color: var(--accent-red);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: var(--transition);
+        }
+
+        .toggle-btn:hover { background-color: #c92b0a; }
+
+        .header-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .header-links a:hover { color: var(--accent-red); }
+
+        .hero-section {
+            text-align: center;
+            margin: 4rem 0;
+        }
+
+        .pokeapi-logo {
+            max-width: 300px;
+            margin-bottom: 2rem;
+            filter: drop-shadow(0 0 10px rgba(255, 203, 5, 0.5));
+        }
+
+        .news-card {
+            background-color: var(--surface-color);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border: 1px solid #333;
+        }
+
+        .news-card h3 {
+            color: var(--accent-blue);
+            margin-bottom: 1rem;
+        }
+
+        #news-text {
+            font-size: 1.2rem;
+            line-height: 1.5;
+            transition: opacity 0.3s;
+        }
+
+        footer {
+            margin-top: 4rem;
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--surface-color);
+        }
+
+        /* ==========================================================================
+           PÁGINA: POKÉDEX
+           ========================================================================== */
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+            border-bottom: 2px solid var(--surface-color);
+            padding-bottom: 1rem;
+        }
+
+        .pokedex-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .poke-card {
+            background-color: var(--surface-color);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+
+        .poke-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-red);
+            box-shadow: 0 12px 20px rgba(227, 53, 13, 0.2);
+        }
+
+        .poke-card img {
+            width: 120px;
+            height: 120px;
+            image-rendering: pixelated;
+        }
+
+        .poke-card h4 {
+            margin-top: 1rem;
+            text-transform: capitalize;
+            color: var(--text-primary);
+        }
+
+        .poke-card span {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* ==========================================================================
+           PÁGINA: BUSCA
+           ========================================================================== */
+        .search-container {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        #search-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--surface-color-hover);
+            background-color: var(--surface-color);
+            color: var(--text-primary);
+            outline: none;
+            transition: var(--transition);
+        }
+
+        #search-input:focus { border-color: var(--accent-red); }
+
+        #search-btn {
+            padding: 0 2rem;
+            font-size: 1.1rem;
+            background-color: var(--accent-red);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: bold;
+            transition: var(--transition);
+        }
+
+        #search-btn:hover { background-color: #c92b0a; }
+
+        .search-result-card {
+            background-color: var(--surface-color);
+            border-radius: var(--border-radius);
+            padding: 3rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            gap: 4rem;
+            align-items: center;
+            display: none; /* Escondido até ter resultado */
+        }
+
+        .result-image {
+            text-align: center;
+            background-color: #2a2a2a;
+            border-radius: 50%;
+            width: 250px;
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .result-image img {
+            width: 200px;
+            height: 200px;
+            image-rendering: pixelated;
+        }
+
+        .result-info { flex: 1; }
+        
+        .result-info h2 {
+            font-size: 2.5rem;
+            text-transform: capitalize;
+            margin-bottom: 0.5rem;
+            color: var(--accent-red);
+        }
+
+        .stat-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .stat-name {
+            width: 130px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: bold;
+        }
+
+        .stat-bar-bg {
+            flex: 1;
+            height: 10px;
+            background-color: #333;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 0 1rem;
+        }
+
+        .stat-bar-fill {
+            height: 100%;
+            background-color: var(--accent-blue);
+            width: 0%; /* Definido via JS */
+            transition: width 1s ease-out;
+        }
+
+        .stat-value {
+            width: 40px;
+            text-align: right;
+            font-weight: bold;
+        }
+
+        /* ==========================================================================
+           ESTADOS DE FEEDBACK E UTILITÁRIOS
+           ========================================================================== */
+        .feedback-msg {
+            text-align: center;
+            padding: 3rem;
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+        }
+
+        .error-msg { color: var(--accent-red); font-weight: bold; }
+
+        /* ==========================================================================
+           RELATÓRIO DE DESIGN
+           ========================================================================== */
+        #design-report {
+            background-color: #000000;
+            padding: 3rem 4rem;
+            border-top: 1px solid #333;
+        }
+
+        #design-report h3 { color: var(--accent-red); margin-bottom: 1rem;}
+        #design-report p, #design-report ul { color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;}
+        #design-report li { margin-left: 1.5rem; margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+
+    <aside id="sidebar">
+        <h2>DexApp</h2>
+        <nav>
+            <button onclick="navigate('home')" id="nav-home" class="active">🏠 Início</button>
+            <button onclick="navigate('pokedex')" id="nav-pokedex">📚 Pokédex</button>
+            <button onclick="navigate('search')" id="nav-search">🔍 Buscar Pokémon</button>
+        </nav>
+    </aside>
+
+    <main id="main-content">
+        
+        <section id="home" class="page active">
+            <header>
+                <button class="toggle-btn" onclick="toggleSidebar()">☰ Menu Lateral</button>
+                <div class="header-links">
+                    <a href="https://www.panini.com.br" target="_blank">Comprar Mangás</a>
+                    <a href="https://store.nintendo.com.br" target="_blank">Nintendo Store</a>
+                </div>
+            </header>
+
+            <div class="hero-section">
+                <img src="https://raw.githubusercontent.com/PokeAPI/media/master/logo/pokeapi_256.png" alt="PokeAPI Logo" class="pokeapi-logo">
+                <p>Bem-vindo ao sistema de catalogação Pokémon moderno.</p>
+            </div>
+
+            <div class="news-card">
+                <h3>📰 Últimas Notícias Pokémon</h3>
+                <p id="news-text">Carregando notícias...</p>
+            </div>
+
+            <footer>
+                <p>&copy; 2026 DexApp LTDA. Todos os direitos reservados.</p>
+                <p>Contato: suporte@dexapp.fake | Tel: 0800 000 0000</p>
+            </footer>
+        </section>
+
+        <section id="pokedex" class="page">
+            <h1 class="page-title">Pokédex Nacional</h1>
+            <div id="pokedex-feedback" class="feedback-msg">Carregando dados da PokeAPI...</div>
+            <div id="pokedex-grid" class="pokedex-grid"></div>
+        </section>
+
+        <section id="search" class="page">
+            <h1 class="page-title">Análise de Atributos</h1>
+            
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Digite o nome ou ID do Pokémon (ex: pikachu, 25)..." onkeypress="handleEnter(event)">
+                <button id="search-btn" onclick="searchPokemon()">Pesquisar</button>
+            </div>
+
+            <div id="search-feedback" class="feedback-msg" style="display: none;"></div>
+
+            <div id="search-result" class="search-result-card">
+                <div class="result-image">
+                    <img id="res-img" src="" alt="Pokemon">
+                </div>
+                <div class="result-info">
+                    <h2 id="res-name">Nome</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">ID: <span id="res-id"></span></p>
+                    
+                    <div id="stats-container">
+                        </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="design-report">
+            <h3>Relatório de Design e UX</h3>
+            <p><strong>Paleta de Cores:</strong></p>
+            <ul>
+                <li><strong>Dark Backgrounds (`#121212` e `#1e1e1e`):</strong> A escolha por um tema escuro (Dark Mode) visa reduzir o cansaço visual, destacar cores vibrantes (como imagens dos Pokémon e barras de status) e conferir um aspecto moderno e tecnológico.</li>
+                <li><strong>Pokémon Red (`#e3350d`):</strong> Utilizado como cor de destaque primária (botões, interações e acentos). Foi extraído diretamente da identidade visual da franquia Pokémon para gerar familiaridade instantânea.</li>
+                <li><strong>Tech Blue (`#31649e`):</strong> Usado nas barras de status e pequenos detalhes para criar um contraste agradável de "quente e frio" com o vermelho, remetendo às telas de sistemas e Pokédex dos jogos originais.</li>
+                <li><strong>Textos (`#ffffff` e `#a0a0a0`):</strong> Contraste alto para títulos e contraste suave para textos de apoio, criando hierarquia de informação sem ofuscar a visão.</li>
+            </ul>
+            <p><strong>Decisões de Engenharia (Desafio da API):</strong> A página Pokédex demanda todos os Pokémon. Se fizéssemos uma requisição por Pokémon para pegar a imagem, a API bloquearia o acesso (Rate Limit) por lentidão e volume. A solução adotada (o "pulo do gato") foi: Fazer apenas 1 requisição solicitando os dados básicos de uma ampla gama (limite ajustado para 1000) e deduzir o ID de cada um com base na URL retornada. Com o ID em mãos, montamos dinamicamente o link da imagem estática do GitHub (onde a PokeAPI hospeda as sprites). Aliado ao atributo <code>loading="lazy"</code> nas imagens, garantimos que o navegador apenas baixe as imagens que o usuário estiver vendo ao fazer scroll, garantindo uma performance impecável e carregamento instantâneo.</p>
+        </section>
+
+    </main>
+
+    <script>
+        /* --- 1. NAVEGAÇÃO SPA (Single Page Application) --- */
+        function navigate(pageId) {
+            // Esconde todas as páginas
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            // Remove a classe active de todos os botões do menu
+            document.querySelectorAll('#sidebar nav button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Mostra a página solicitada
+            document.getElementById(pageId).classList.add('active');
+            // Marca o botão do menu como ativo
+            document.getElementById('nav-' + pageId).classList.add('active');
+
+            // Gatilhos de carregamento preguiçoso sob demanda
+            if (pageId === 'pokedex' && !pokedexLoaded) {
+                loadPokedex();
+            }
+        }
+
+        /* --- 2. MENU LATERAL (TOGGLE) --- */
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('collapsed');
+        }
+
+        /* --- 3. NOTÍCIAS DINÂMICAS DA HOME --- */
+        const newsArray = [
+            "Descubra as novas espécies encontradas na região de Paldea!",
+            "Campeonato Mundial de Pokémon TCG acontecerá no Havaí este ano.",
+            "Rumores apontam para o desenvolvimento de Pokémon Legends Z-A.",
+            "Ash Ketchum se despede do anime após 25 anos de jornada."
+        ];
+        let currentNewsIndex = 0;
+
+        function startNewsRotator() {
+            const newsEl = document.getElementById('news-text');
+            newsEl.innerText = newsArray[0];
+
+            setInterval(() => {
+                // Efeito simples de fade
+                newsEl.style.opacity = 0;
+                setTimeout(() => {
+                    currentNewsIndex = (currentNewsIndex + 1) % newsArray.length;
+                    newsEl.innerText = newsArray[currentNewsIndex];
+                    newsEl.style.opacity = 1;
+                }, 300); // aguarda o texto sumir para trocar
+            }, 5000); // Troca a cada 5 segundos
+        }
+
+        /* --- 4. CARREGAMENTO DA POKÉDEX GERAL --- */
+        let pokedexLoaded = false;
+
+        async function loadPokedex() {
+            const grid = document.getElementById('pokedex-grid');
+            const feedback = document.getElementById('pokedex-feedback');
+            
+            try {
+                feedback.innerText = "Buscando dados na PokeAPI...";
+                
+                // Desafio da API: 
+                // Pegar 1000 de uma vez em 1 única chamada (Economiza requisições).
+                const res = await fetch('https://pokeapi.co/api/v2/pokemon?limit=1000');
+                if (!res.ok) throw new Error('Falha na rede');
+                
+                const data = await res.json();
+                
+                // Utilizando DocumentFragment para performance pesada de manipulação do DOM
+                const fragment = document.createDocumentFragment();
+
+                data.results.forEach(poke => {
+                    // Extrai o ID da URL retornada (ex: "https://pokeapi.co/api/v2/pokemon/25/")
+                    const urlParts = poke.url.split('/');
+                    const id = urlParts[urlParts.length - 2]; 
+
+                    const card = document.createElement('div');
+                    card.className = 'poke-card';
+                    
+                    // Monta o card. loading="lazy" é essencial para não estourar a memória com 1000 imagens
+                    card.innerHTML = `
+                        <img loading="lazy" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png" alt="${poke.name}" onerror="this.src=''">
+                        <span>Nº ${id.padStart(3, '0')}</span>
+                        <h4>${poke.name.replace('-', ' ')}</h4>
+                    `;
+                    fragment.appendChild(card);
+                });
+
+                grid.appendChild(fragment);
+                feedback.style.display = 'none'; // Esconde o loading
+                pokedexLoaded = true;
+
+            } catch (error) {
+                console.error(error);
+                feedback.innerHTML = "<span class='error-msg'>Erro ao carregar os Pokémon. Tente novamente mais tarde.</span>";
+            }
+        }
+
+        /* --- 5. BUSCA E ATRIBUTOS (STATS) --- */
+        // Permite pesquisar ao apertar "Enter"
+        function handleEnter(e) {
+            if (e.key === 'Enter') {
+                searchPokemon();
+            }
+        }
+
+        async function searchPokemon() {
+            const input = document.getElementById('search-input').value.trim().toLowerCase();
+            const feedback = document.getElementById('search-feedback');
+            const resultCard = document.getElementById('search-result');
+            
+            if (!input) return;
+
+            // Interface Loading
+            resultCard.style.display = 'none';
+            feedback.style.display = 'block';
+            feedback.className = 'feedback-msg';
+            feedback.innerText = "Pesquisando Pokémon...";
+
+            try {
+                const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${input}`);
+                
+                if (!res.ok) {
+                    throw new Error('Pokémon não encontrado.');
+                }
+
+                const data = await res.json();
+                
+                // Popula os dados de exibição
+                document.getElementById('res-img').src = data.sprites.other['official-artwork'].front_default || data.sprites.front_default;
+                document.getElementById('res-name').innerText = data.name.replace('-', ' ');
+                document.getElementById('res-id').innerText = data.id;
+
+                // Popula as estatísticas de batalha
+                const statsContainer = document.getElementById('stats-container');
+                statsContainer.innerHTML = ''; // Limpa anterior
+
+                data.stats.forEach(statObj => {
+                    const statName = formatStatName(statObj.stat.name);
+                    const statValue = statObj.base_stat;
+                    // Calcula a % considerando que 255 é teoricamente o status máximo (como na Blissey)
+                    const percentage = Math.min((statValue / 255) * 100, 100);
+
+                    const row = document.createElement('div');
+                    row.className = 'stat-row';
+                    row.innerHTML = `
+                        <div class="stat-name">${statName}</div>
+                        <div class="stat-bar-bg">
+                            <div class="stat-bar-fill" style="width: ${percentage}%"></div>
+                        </div>
+                        <div class="stat-value">${statValue}</div>
+                    `;
+                    statsContainer.appendChild(row);
+                });
+
+                // Troca as telas
+                feedback.style.display = 'none';
+                resultCard.style.display = 'flex';
+
+            } catch (error) {
+                feedback.className = 'feedback-msg error-msg';
+                feedback.innerText = "Pokémon não encontrado. Verifique a ortografia ou o ID numérico.";
+            }
+        }
+
+        // Função auxiliar para deixar os nomes dos status amigáveis
+        function formatStatName(name) {
+            const map = {
+                'hp': 'HP',
+                'attack': 'Attack',
+                'defense': 'Defense',
+                'special-attack': 'Sp. Atk',
+                'special-defense': 'Sp. Def',
+                'speed': 'Speed'
+            };
+            return map[name] || name;
+        }
+
+        /* --- 6. INICIALIZAÇÃO GERAL --- */
+        window.onload = () => {
+            startNewsRotator();
+        };
+    </script>
+</body>
+</html>
