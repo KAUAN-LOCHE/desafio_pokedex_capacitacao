@@ -1,46 +1,39 @@
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import "./App.css";
-// import { useApp } from "./App.hook";
 import Pokedex from "./pages/Pokedex/pokedex";
+import Busca from "./pages/Busca"; 
 
 function App() {
-  // const { loading, pokemons, onPokemonSelect } = useApp();
-;
+  return (
+    <BrowserRouter>
+      <div className="app-layout">
+        
+        <nav className="sidebar">
+          <h2>Menu</h2>
+          <Link to="/">🏠 Home</Link>
+          <Link to="/pokedex">📖 Pokédex</Link>
+          <Link to="/busca">🔍 Buscar Pokémon</Link>
+        </nav>
 
-  // const renderPokedex = () => (
-  //   <>
-  //     {/* <h1>Pokédex</h1>
-  //     <h2>Selecione um Pokémon</h2>
-  //     <section>
-  //       <ul className="pokemon-grid">
-  //         {pokemons.map((pokemon) => (
-  //           <li key={pokemon.id}>
-  //             <div
-  //               onClick={() => onPokemonSelect(pokemon)}
-  //               className="pokemon-wrapper"
-  //             >
-  //               <h3>{pokemon.name}</h3>
-  //               <p className={`type-${pokemon.type1.toLowerCase()}`}>
-  //                 {pokemon.type1}
-  //               </p>
-  //               {pokemon.type2 && (
-  //                 <p className={`type-${pokemon.type2.toLowerCase()}`}>
-  //                   {pokemon.type2}
-  //                 </p>
-  //               )}
-  //             </div>
-  //           </li>
-  //         ))}
-  //       </ul>
-  //     </section> */}
-  //     <Pokedex></Pokedex>
-  //   </>
-  // );
+        <main className="content">
+          <Routes>
+            <Route path="/" element={
+              <div style={{ textAlign: 'center' }}>
+                <h1>Bem-vindo à Pokédex</h1>
+                <p>Navegue pelo menu lateral para explorar a lista completa ou buscar um Pokémon específico.</p>
+              </div>
+            } />
+            
+            {/* Mantém o componente Pokedex original dos seus colegas */}
+            <Route path="/pokedex" element={<Pokedex />} />
+            
+            {/* Adiciona a sua nova página de Busca */}
+            <Route path="/busca" element={<Busca />} />
+          </Routes>
+        </main>
 
-  // return <main>{loading ? renderLoading() : renderPokedex()}</main>;
-  return(
-    <>
-    <Pokedex></Pokedex>
-    </>
+      </div>
+    </BrowserRouter>
   );
 }
 

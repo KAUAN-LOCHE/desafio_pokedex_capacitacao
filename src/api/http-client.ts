@@ -69,6 +69,32 @@ export const pokeApiClient = new HttpClient("https://pokeapi.co/api/v2", {
   },
 });
 
+export interface PokemonDetails {
+    id: number;
+    name: string;
+    height: number;
+    weight: number;
+    sprites: {
+        front_default: string | null;
+        other: {
+            'official-artwork': {
+                front_default: string | null;
+            };
+        };
+    };
+    types: Array<{
+        type: {
+            name: string;
+        };
+    }>;
+    stats: Array<{
+        base_stat: number;
+        stat: {
+            name: string;
+        };
+    }>;
+}
+
 export interface PokemonBase {
     name: string;
     url: string;
@@ -146,3 +172,5 @@ export const fetchDetailsRecursively = async (pokemonList: PokemonBase[], index:
 
     return fetchDetailsRecursively(pokemonList, index + 1, results);
 };
+
+export default pokeApiClient;
