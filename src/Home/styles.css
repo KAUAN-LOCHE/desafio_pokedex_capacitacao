@@ -1,0 +1,213 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@300;400;500&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #0a0a0a; /* Fundo preto base */
+  color: #e0e0e0;
+  font-family: 'Montserrat', sans-serif;
+  overflow-x: hidden;
+}
+
+.home-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- HEADER  --- */
+.home-header {
+  width: 100%;
+  background-color: #1a1a1a; 
+  padding: 8px 15px; 
+}
+
+/* Área central do header */
+.header-inner {
+  width: 100%;
+  max-width: 100%; /* Ocupa tudo dentro da moldura */
+  background-color: #0a0a0a; 
+  border: 1px solid #2a2a2a; /* Borda */
+  border-radius: 8px; /* Cantos arredondados */
+  height: 60px;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: inset 0 2px 10px rgba(0,0,0,0.8); /* Sombra para profundidade */
+}
+
+/* Botão de Menu Lateral */
+.btn-menu-lateral {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #e3350d; 
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.btn-menu-lateral:hover {
+  background-color: #ff1f1f;
+  transform: translateY(-1px);
+}
+
+.icon-hamburguer {
+  width: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.icon-hamburguer .bar {
+  width: 100%;
+  height: 2px;
+  background-color: white;
+}
+
+/* Links do Header */
+.header-links a {
+  color: #e0e0e0;
+  text-decoration: none;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  margin-left: 25px;
+  font-size: 0.85rem;
+  transition: color 0.3s ease;
+}
+
+.header-links a:hover {
+  color: #ffcb05;
+}
+
+/* --- CONTEÚDO CENTRAL --- */
+.home-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Centraliza verticalmente */
+  text-align: center;
+  gap: 10px;
+  padding: 40px;
+}
+
+.logo-home {
+  width: 180px; 
+  height: auto;
+  margin-bottom: 5px;
+  filter: drop-shadow(0 0 10px rgba(255, 203, 5, 0.2));
+}
+
+.subtitle-elegante {
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 1.1rem;
+  color: #a0a0a0;
+  max-width: 600px;
+  line-height: 1.4;
+}
+
+/* --- CARD DE NOTÍCIAS  --- */
+.news-card-isolated {
+  width: 100%;
+  max-width: 900px; 
+  background-color: #1a1a1a; 
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  padding: 30px;
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  transition: transform 0.3s ease;
+}
+
+.news-card-isolated:hover {
+  transform: translateY(-3px);
+}
+
+.news-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+
+.icon-news {
+  width: 20px;
+  height: 20px;
+  background-color: transparent;
+  border: 2px solid #555;
+  position: relative;
+}
+
+.icon-news::after {
+  content: '';
+  position: absolute;
+  top: 4px; left: 4px; right: 4px; height: 2px;
+  background-color: #555;
+}
+
+.icon-news::before {
+  content: '';
+  position: absolute;
+  top: 10px; left: 4px; width: 6px; height: 2px;
+  background-color: #555;
+}
+
+.news-card-isolated h3 {
+  color: #ffcb05;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.news-text-isolated {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 1.05rem;
+  color: #cccccc;
+  line-height: 1.6;
+}
+
+/* --- FOOTER  --- */
+.home-footer-isolated {
+  width: 100%;
+  padding: 30px;
+  text-align: center;
+  margin-top: auto; 
+}
+
+.footer-content-isolated {
+  color: #555;
+  font-size: 0.8rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* Responsividade Básica */
+@media (max-width: 768px) {
+  .header-inner { padding: 0 10px; }
+  .header-links { display: none; }
+  .logo-home { width: 140px; }
+  .subtitle-elegante { font-size: 0.9rem; padding: 0 20px; }
+  .news-card-isolated { width: 90%; padding: 20px; }
+  .news-text-isolated { font-size: 0.9rem; }
+}

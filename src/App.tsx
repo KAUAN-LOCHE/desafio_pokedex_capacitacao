@@ -1,5 +1,7 @@
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import { useApp } from "./App.hook";
+import Home from "./pages/Home"; 
 
 function App() {
   const { loading, pokemons, onPokemonSelect } = useApp();
@@ -39,8 +41,18 @@ function App() {
     </>
   );
 
-  return <main>{loading ? renderLoading() : renderPokedex()}</main>;
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+
+        <Route 
+          path="/pokedex" 
+          element={<main>{loading ? renderLoading() : renderPokedex()}</main>} 
+        />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
-
